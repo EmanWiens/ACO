@@ -5,10 +5,12 @@ public class Ant {
   private int[] visited; // nodes visited during trip 
   private int trip; 
   private float totalDist; 
+  private int id; 
   
-  public Ant(City city, float eta[][]) { 
+  public Ant(int id, City city, float eta[][]) { 
     this.city = city; 
     this.eta = eta; 
+    this.id = id; 
     updateVisibility(city.getId()); 
     prob = new float[numCities]; 
     
@@ -47,7 +49,7 @@ public class Ant {
       updateVisibility(city.getId()); 
     }
     
-    print("totalDist: " + totalDist + " | chosen path:"); 
+    print("Ant " + id + " totalDist: " + totalDist + " | chosen path:"); 
     printV(visited); 
   } 
   

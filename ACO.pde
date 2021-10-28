@@ -9,11 +9,10 @@ Purpose: This is a simple ant colony optimization implementation based on Ant Co
 
 final int numCities = 10; // numer of random cities to generate 
 final float rho = 0.5; // evaporation constant 
-final int numAnts = 10000; // number of ants to randomly place 
+final int numAnts = 1000; // number of ants to randomly place 
 final float alpha = 1; // importance of pheromone trail 
 final float beta = 2; // importance of distance 
 
-float highestTau, lowestTau; 
 City[] cities; 
 Ant[] ants; 
 float d[][]; // distance matrix 
@@ -22,6 +21,7 @@ float tau[][]; // initial pheromone matrix
 int globalBestAnt; 
 boolean globalBestFound; 
 float averageDist; 
+float highestTau, lowestTau; 
 
 void setup() {
   size(500, 500); 
@@ -107,7 +107,7 @@ void updateTau() {
       
       tau[firstCity][secondCity] = (tau[firstCity][secondCity] + 1f / ants[ant].totalDist); 
     } 
-  }
+  } 
 } 
 
 void getGlobalBest() {
@@ -136,9 +136,9 @@ void evap() {
 void initAnts(int initCity) {
   for (int i = 0; i < ants.length; i++) {
     if (initCity != -1)
-      ants[i] = new Ant(cities[initCity], copyArray(etaInit)); 
+      ants[i] = new Ant(i, cities[initCity], copyArray(etaInit)); 
     else 
-      ants[i] = new Ant(cities[(int)random(numCities)], copyArray(etaInit)); 
+      ants[i] = new Ant(i, cities[(int)random(numCities)], copyArray(etaInit)); 
   }
 }
 
