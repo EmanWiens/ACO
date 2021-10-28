@@ -1,9 +1,17 @@
-final int numCities = 10; 
-final float rho = 0.5; 
-final int numAnts = 10000; 
-final float alpha = 1; 
-final float beta = 2; 
-final float epsilon = .001; 
+/* 
+
+Created by Emanuel Wiens 
+Created in Oct 27, 2021 
+Purpose: This is a simple ant colony optimization implementation based on Ant Colony Optimization by Budi Santosa at https://bsantosa.files.wordpress.com/2015/03/aco-tutorial-english2.pdf. 
+  The ants will make probabilistic about what the shortest path is and the result will be a probabilistic solution.  
+  Note, you can change some of the final variables at the top. 
+*/ 
+
+final int numCities = 10; // numer of random cities to generate 
+final float rho = 0.5; // evaporation constant 
+final int numAnts = 10000; // number of ants to randomly place 
+final float alpha = 1; // importance of pheromone trail 
+final float beta = 2; // importance of distance 
 
 float highestTau, lowestTau; 
 City[] cities; 
