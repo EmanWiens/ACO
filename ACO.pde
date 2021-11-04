@@ -11,7 +11,7 @@ final float rho = 0.5; // evaporation constant
 final int numAnts = 20; // number of ants to randomly place 
 final float alpha = 1; // importance of pheromone trail 
 final float beta = 2; // importance of distance 
-final int epochs = 250; // number of iterations 
+final int epochs = 100; // number of iterations 
 
 City[] cities; 
 Ant[] ants; 
@@ -27,7 +27,7 @@ int epochCounter = 0;
 void setup() {
   size(500, 500); 
   globalBestFound = false; 
-  randomSeed(0); // set a seed for testing
+  randomSeed(2); // set a seed for testing
   globalBestAnt = 0; 
   averageDist = 0; 
   
@@ -63,6 +63,10 @@ void runACO(int epoch) {
   print("Global best ant " + globalBestAnt + " with dist " + ants[globalBestAnt].totalDist + " and chosen path: "); 
   printV(ants[globalBestAnt].visited); 
   println(); 
+  
+  fill(0); 
+  stroke(0); 
+  text("Epoch: " + epoch, 1, height - textDescent()); 
 }
 
 void draw() {
