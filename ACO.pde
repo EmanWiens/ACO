@@ -7,11 +7,12 @@ Purpose: This is a simple ant colony optimization implementation based on Ant Co
   Note, you can change some of the final variables at the top. 
 */ 
 
-final int numCities = 10; // numer of random cities to generate 
+final int numCities = 20; // numer of random cities to generate 
 final float rho = 0.5; // evaporation constant 
-final int numAnts = 1000; // number of ants to randomly place 
+final int numAnts = 100; // number of ants to randomly place 
 final float alpha = 1; // importance of pheromone trail 
 final float beta = 2; // importance of distance 
+final int epochs = 100; 
 
 City[] cities; 
 Ant[] ants; 
@@ -22,13 +23,12 @@ int globalBestAnt;
 boolean globalBestFound; 
 float averageDist; 
 float highestTau, lowestTau; 
+int epochCounter = 0; 
 
 void setup() {
   size(500, 500); 
   globalBestFound = false; 
-  // randomSeed(0); // set a seed for testing 
-  highestTau = 0; 
-  lowestTau = 1; 
+  // randomSeed(0); // set a seed for testing
   globalBestAnt = 0; 
   averageDist = 0; 
   
@@ -40,13 +40,15 @@ void setup() {
   etaInit = new float[numCities][numCities]; 
   initDistances(); 
   
-  // init the ants based on cities and visibility (1/distance) 
-  ants = new Ant[numAnts]; 
-  initAnts(-1); 
-  
   // init the pheromone 
   tau = new float[numCities][numCities];
   initTau(); 
+} 
+
+void runACO(int epoch) {
+  // init the ants based on cities and visibility (1/distance) 
+  ants = new Ant[numAnts]; 
+  initAnts(-1); 
   
   // run all possible paths  
   for (int i = 0; i < numAnts; i++) {
@@ -56,18 +58,22 @@ void setup() {
   // update the pheromone trails 
   updateTau(); 
   evap(); 
-  println("highest and lowest tau: " + highestTau + ", " + lowestTau); 
-  
-  // find the global best ant 
+  findHighestAndLowest(); 
+  println("Epoch: " + epoch + " highest and lowest tau: " + highestTau + ", " + lowestTau); 
   getGlobalBest(); 
   print("Global best ant " + globalBestAnt + " with dist " + ants[globalBestAnt].totalDist + " and chosen path: "); 
   printV(ants[globalBestAnt].visited); 
-  println("Average dist: " + (averageDist / ants.length)); 
-  globalBestFound = true; 
-} 
+  println(); 
+}
 
 void draw() {
   background(200); 
+  
+  if (epochCounter < epochs) {
+    runACO(epochCounter++); 
+  } else {
+    globalBestFound = true; 
+  }
   
   // draw the cities 
   for (int i = 0; i < cities.length; i++) {
@@ -76,12 +82,12 @@ void draw() {
   
   // draw pheromone 
   float normalizedTau = 0; 
-  for (int i = 0; i < cities.length; i++) {
-    for (int j = 0; j < cities.length; j++) {
+  for (int i = 0; i < cities.length; i++) { 
+    for (int j = 0; j < cities.length; j++) { 
       normalizedTau = (tau[i][j] - lowestTau) / (highestTau - lowestTau); 
       stroke(0, normalizedTau * 255f); 
       line(cities[i].pos.x, cities[i].pos.y, cities[j].pos.x, cities[j].pos.y); 
-    }
+    } 
   } 
   
   // Draw best path
@@ -119,16 +125,33 @@ void getGlobalBest() {
   }
 }
 
-void evap() {
+void normalizeTau() { 
   for (int i = 0; i < cities.length; i++) {
     for (int j = 0; j < cities.length; j++) {
-      tau[i][j] = tau[i][j] * (1f - rho); 
-      
+      tau[i][j] = (tau[i][j] - lowestTau) / (highestTau - lowestTau); 
+    }
+  }
+} 
+
+void findHighestAndLowest() { 
+  highestTau = 0; 
+  lowestTau = 1; 
+  
+  for (int i = 0; i < cities.length; i++) {
+    for (int j = 0; j < cities.length; j++) {      
       if (tau[i][j] > highestTau)
         highestTau = tau[i][j]; 
       
       if (tau[i][j] < lowestTau) 
         lowestTau = tau[i][j]; 
+    }
+  } 
+}
+
+void evap() {
+  for (int i = 0; i < cities.length; i++) {
+    for (int j = 0; j < cities.length; j++) {
+      tau[i][j] = tau[i][j] * (1f - rho); 
     }
   } 
 }

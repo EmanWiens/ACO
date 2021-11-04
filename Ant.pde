@@ -48,9 +48,6 @@ public class Ant {
       visited[trip++] = city.getId(); 
       updateVisibility(city.getId()); 
     }
-    
-    print("Ant " + id + " totalDist: " + totalDist + " | chosen path:"); 
-    printV(visited); 
   } 
   
   public float prob(int r, int s) { // from city r to city s 
