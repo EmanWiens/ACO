@@ -43,6 +43,8 @@ public class Ant {
         }
       } 
       
+      if (chosenCity == -1) 
+        chosenCity = numCities - 1; 
       totalDist += d[city.getId()][chosenCity]; 
       city = getCity(chosenCity); 
       visited[trip++] = city.getId(); 

@@ -9,10 +9,10 @@ Purpose: This is a simple ant colony optimization implementation based on Ant Co
 
 final int numCities = 20; // numer of random cities to generate 
 final float rho = 0.5; // evaporation constant 
-final int numAnts = 100; // number of ants to randomly place 
+final int numAnts = 20; // number of ants to randomly place 
 final float alpha = 1; // importance of pheromone trail 
 final float beta = 2; // importance of distance 
-final int epochs = 100; 
+final int epochs = 250; 
 
 City[] cities; 
 Ant[] ants; 
@@ -28,7 +28,7 @@ int epochCounter = 0;
 void setup() {
   size(500, 500); 
   globalBestFound = false; 
-  // randomSeed(0); // set a seed for testing
+  randomSeed(0); // set a seed for testing
   globalBestAnt = 0; 
   averageDist = 0; 
   
