@@ -1,5 +1,4 @@
 /* 
-
 Created by Emanuel Wiens 
 Created in Oct 27, 2021 
 Purpose: This is a simple ant colony optimization implementation based on Ant Colony Optimization by Budi Santosa at https://bsantosa.files.wordpress.com/2015/03/aco-tutorial-english2.pdf. 
@@ -12,7 +11,7 @@ final float rho = 0.5; // evaporation constant
 final int numAnts = 20; // number of ants to randomly place 
 final float alpha = 1; // importance of pheromone trail 
 final float beta = 2; // importance of distance 
-final int epochs = 250; 
+final int epochs = 250; // number of iterations 
 
 City[] cities; 
 Ant[] ants; 
@@ -124,14 +123,6 @@ void getGlobalBest() {
       globalBestAnt = i; 
   }
 }
-
-void normalizeTau() { 
-  for (int i = 0; i < cities.length; i++) {
-    for (int j = 0; j < cities.length; j++) {
-      tau[i][j] = (tau[i][j] - lowestTau) / (highestTau - lowestTau); 
-    }
-  }
-} 
 
 void findHighestAndLowest() { 
   highestTau = 0; 

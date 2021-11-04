@@ -54,7 +54,6 @@ public class Ant {
   
   public float prob(int r, int s) { // from city r to city s 
     float toReturn = 0; 
-    
     toReturn = pow(tau[r][s], alpha) * pow(eta[r][s], beta); 
     float sumM = 0;
     
