@@ -6,7 +6,7 @@ Purpose: This is a simple ant colony optimization implementation based on Ant Co
   Note, you can change some of the final variables at the top. 
 */ 
 
-final int numCities = 20; // numer of random cities to generate 
+final int numCities = 25; // numer of random cities to generate 
 final float rho = 0.5; // evaporation constant 
 final int numAnts = 20; // number of ants to randomly place 
 final float alpha = 1; // importance of pheromone trail 
@@ -18,7 +18,7 @@ Ant[] ants;
 float d[][]; // distance matrix 
 float etaInit[][]; // visibility matrix 
 float tau[][]; // initial pheromone matrix 
-int globalBestAnt; 
+Ant globalBestAnt; 
 boolean globalBestFound; 
 float averageDist; 
 float highestTau, lowestTau; 
@@ -28,7 +28,6 @@ void setup() {
   size(500, 500); 
   globalBestFound = false; 
   randomSeed(2); // set a seed for testing
-  globalBestAnt = 0; 
   averageDist = 0; 
   
   cities = new City[numCities]; 
@@ -59,9 +58,13 @@ void runACO(int epoch) {
   evap(); 
   findHighestAndLowest(); 
   println("Epoch: " + epoch + " highest and lowest tau: " + highestTau + ", " + lowestTau); 
-  getGlobalBest(); 
-  print("Global best ant " + globalBestAnt + " with dist " + ants[globalBestAnt].totalDist + " and chosen path: "); 
-  printV(ants[globalBestAnt].visited); 
+  
+  int best = getGlobalBest(); 
+  if (best != -1) 
+    globalBestAnt = ants[best]; 
+  
+  print("Global best ant " + globalBestAnt.id + " with dist " + globalBestAnt.totalDist + " and chosen path: "); 
+  printV(globalBestAnt.visited); 
   println(); 
   
   fill(0); 
@@ -97,9 +100,9 @@ void draw() {
   if (globalBestFound) {
     stroke(0, 255, 0); 
     int firstCity, secondCity; 
-    for (int i = 0; i < ants[globalBestAnt].visited.length - 1; i++) {
-      firstCity = ants[globalBestAnt].visited[i]; 
-      secondCity = ants[globalBestAnt].visited[i + 1];
+    for (int i = 0; i < globalBestAnt.visited.length - 1; i++) {
+      firstCity = globalBestAnt.visited[i]; 
+      secondCity = globalBestAnt.visited[i + 1];
         
       line(cities[firstCity].pos.x, cities[firstCity].pos.y, cities[secondCity].pos.x, cities[secondCity].pos.y); 
     }
@@ -119,13 +122,22 @@ void updateTau() {
   } 
 } 
 
-void getGlobalBest() {
+int getGlobalBest() {
+  int best = -1; 
+  
+  if (globalBestAnt == null) { 
+    globalBestAnt = ants[0];
+    best = 0; 
+  }
+  
   for (int i = 0; i < ants.length; i++) {
     averageDist += ants[i].totalDist; 
     
-    if (ants[i].totalDist < ants[globalBestAnt].totalDist)
-      globalBestAnt = i; 
+    if (ants[i].totalDist < globalBestAnt.totalDist)
+      globalBestAnt = ants[i]; 
   }
+  
+  return best; 
 }
 
 void findHighestAndLowest() { 
