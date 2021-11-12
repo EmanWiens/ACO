@@ -6,12 +6,12 @@ Purpose: This is a simple ant colony optimization implementation based on Ant Co
   Note, you can change some of the final variables at the top. 
 */ 
 
-final int numCities = 25; // numer of random cities to generate 
+final int numCities = 64; // numer of random cities to generate 
 final float rho = 0.5; // evaporation constant 
-final int numAnts = 20; // number of ants to randomly place 
+final int numAnts = 8; // number of ants to randomly place 
 final float alpha = 1; // importance of pheromone trail 
 final float beta = 2; // importance of distance 
-final int epochs = 100; // number of iterations 
+final int epochs = 200; // number of iterations 
 
 City[] cities; 
 Ant[] ants; 
@@ -23,6 +23,7 @@ boolean globalBestFound;
 float averageDist; 
 float highestTau, lowestTau; 
 int epochCounter = 0; 
+float startTime, totalTime; 
 
 void setup() {
   size(500, 500); 
@@ -41,6 +42,9 @@ void setup() {
   // init the pheromone 
   tau = new float[numCities][numCities];
   initTau(); 
+  
+  startTime = millis(); 
+  totalTime = -1; 
 } 
 
 void runACO(int epoch) {
@@ -98,6 +102,14 @@ void draw() {
   
   // Draw best path
   if (globalBestFound) {
+    if (totalTime == -1)
+      totalTime = millis() - startTime;  
+    else { 
+      fill(0); 
+      stroke(0); 
+      text((totalTime / 1000f) + " seconds with dist " + globalBestAnt.totalDist, 1, height - textDescent()); 
+    }
+    
     stroke(0, 255, 0); 
     int firstCity, secondCity; 
     for (int i = 0; i < globalBestAnt.visited.length - 1; i++) {
