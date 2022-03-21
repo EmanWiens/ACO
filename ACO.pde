@@ -6,12 +6,12 @@ Purpose: This is a simple ant colony optimization implementation based on Ant Co
   Note, you can change some of the final variables at the top. 
 */ 
 
-final int numCities = 64; // numer of random cities to generate 
+final int numCities = 32; // numer of random cities to generate 
 final float rho = 0.5; // evaporation constant 
-final int numAnts = 8; // number of ants to randomly place 
+final int numAnts = 16; // number of ants to randomly place 
 final float alpha = 1; // importance of pheromone trail 
 final float beta = 2; // importance of distance 
-final int epochs = 200; // number of iterations 
+final int epochs = 100; // number of iterations 
 
 City[] cities; 
 Ant[] ants; 
